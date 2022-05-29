@@ -7,10 +7,10 @@ app = Flask(__name__)
 
 with open('settings.yml', 'r') as file:
     settings = yaml.safe_load(file)
-    app.config['MYSQL_HOST'] = settings['MYSQL']['MYSQL_HOST']
-    app.config['MYSQL_USER'] = settings['MYSQL']['MYSQL_USER']
-    app.config['MYSQL_PASSWORD'] = settings['MYSQL']['MYSQL_PASSWORD']
-    app.config['MYSQL_DB'] = settings['MYSQL']['MYSQL_DB']
+    app.config['MYSQL_DATABASE_HOST'] = settings['MYSQL']['MYSQL_HOST']
+    app.config['MYSQL_DATABASE_USER'] = settings['MYSQL']['MYSQL_USER']
+    app.config['MYSQL_DATABASE_PASSWORD'] = settings['MYSQL']['MYSQL_PASSWORD']
+    app.config['MYSQL_DATABASE_DB'] = settings['MYSQL']['MYSQL_DB']
     app.config['DEBUG'] = True
     app.config['TESTING'] = True
 
@@ -18,24 +18,32 @@ mysql = MySQL()
 mysql.init_app(app)
 
 
+def data_processing():
+    data = request.args.to_dict() or request.data or request.form or {}
+
+    return data
+
+
 @app.route('/users', methods=['GET', 'POST'])
-def users():  # put application's code here
+def users():
+    data = data_processing()
     if request.method == 'GET':
+        #cursor = mysql.get_db().cursor()
         return "Login GET"
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        phone = request.form['phone']
-        password = request.form['password']
+        name = data['name']
+        email = data['email']
+        phone = data['phone']
+        password = data['password']
         print(f'''INSERT INTO users VALUES({name},{email},{phone},{password})''')
         cursor = mysql.get_db().cursor()
-        cursor.execute(f'''INSERT INTO users VALUES({name},{email},{phone},{password})''')
-        mysql.connection.commit()
+        cursor.execute(f'''INSERT INTO `school_x`.`users` (`name`, `email`, `phone`, `password`) VALUES("{name}","{email}","{phone}","{password}")''')
+        cursor.connection.commit()
         cursor.close()
-        return 200
+        return 'all good, created'
 
-    return 'Hello World!'
+
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='localhost', port=8080, debug=True)
