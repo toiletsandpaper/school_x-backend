@@ -115,7 +115,76 @@ def users():
 def images():
     data = data_processing()
     if request.method == 'GET':
-        ...
+        image_id = None
+        owner_id = None
+        ratio = None
+        for k, v in data.items():
+            if k == 'image_id': image_id = v
+            if k == 'owner_id': owner_id = v
+            if k == 'ratio': ratio = v
+
+        if not image_id and not owner_id:
+            return jsonify({'message': "No image_id OR owner_id provided"}), 403
+        cursor = mysql.get_db().cursor()
+        if image_id and not owner_id:
+            cursor.execute(
+                f'''SELECT `owner_id`, `name` FROM `school_x`.`images` WHERE `id` = "{image_id}"'''
+            )
+            fetcher = cursor.fetchone()
+            if not fetcher:
+                return jsonify({'message': 'File not found'}), 404
+            owner_id = fetcher[0]
+            image_name = fetcher[1]
+            cursor.execute(
+                f'''SELECT `name` FROM `school_x`.`users` WHERE `id` = "{owner_id}"'''
+            )
+            owner_name = cursor.fetchone()[0]
+
+            cursor.execute(
+                f'''SELECT `folder_path` FROM `school_x`.`files` WHERE `image_id` = "{image_id}"'''
+            )
+            folder_path = cursor.fetchone()[0]
+            return jsonify({'image_id': image_id,
+                            'owner_id': owner_id,
+                            'owner_name': owner_name,
+                            'image_name': image_name,
+                            'folder_path': folder_path})
+
+        if owner_id and not image_id:
+            cursor.execute(
+                f'''SELECT `name` FROM `school_x`.`users` WHERE `id` = "{owner_id}"'''
+            )
+            owner_name = cursor.fetchone()[0]
+
+            cursor.execute(
+                f'''SELECT `name` FROM `school_x`.`images` WHERE `owner_id` = "{owner_id}"'''
+            )
+            images_names = cursor.fetchall()
+            images_ids = {}
+            folders_paths = {}
+            for image_name in images_names:
+                image_name = image_name[0]
+                cursor.execute(
+                    f'''SELECT `id` FROM `school_x`.`images` WHERE `name` = "{image_name}"'''
+                )
+                image_id_ = cursor.fetchone()
+                #return jsonify(image_name)
+                images_ids[image_id_[0]] = image_name
+
+                cursor.execute(
+                    f'''SELECT `folder_path` FROM `school_x`.`files` WHERE `image_id` = "{image_id_[0]}"'''
+                )
+                folders_paths[image_id_[0]] = cursor.fetchone()[0]
+            return jsonify({'owner_name': owner_name,
+                            'images_ids': images_ids,
+                            'folder_paths': folders_paths,
+                            'owner_id': owner_id,
+                            'ratio': ratio}
+            ), 200
+
+
+
+
     if request.method == 'POST':
         owner_id = data['owner_id']
         image_url = data['image_url']
