@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `favorites`;
 CREATE TABLE `favorites` (
   `user_id` int DEFAULT NULL,
   `image_id` int DEFAULT NULL,
-  `created` timestamp(3) NULL DEFAULT NULL,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
   KEY `user id_idx` (`user_id`),
   KEY `image id_idx` (`image_id`),
   CONSTRAINT `image id (favorites)` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`),
@@ -54,13 +54,12 @@ DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `id` int NOT NULL AUTO_INCREMENT,
   `image_id` int DEFAULT NULL,
-  `size` varchar(63) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
+  `folder_path` varchar(255) DEFAULT NULL,
   `created` timestamp(3) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `image id_idx` (`image_id`),
   CONSTRAINT `image id (files)` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,6 +68,7 @@ CREATE TABLE `files` (
 
 LOCK TABLES `files` WRITE;
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
+INSERT INTO `files` VALUES (2,13,'/Users/toiletsandpaper/PycharmProjects/school-x_project/images/266e47c4-26f6-4c2b-9efd-287c9743ea77',NULL),(3,14,'/Users/toiletsandpaper/PycharmProjects/school-x_project/images/b4094f10-9cb1-4955-a851-b1e6a069e556',NULL);
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,12 +83,12 @@ CREATE TABLE `images` (
   `id` int NOT NULL AUTO_INCREMENT,
   `owner_id` int DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `created` timestamp(3) NULL DEFAULT NULL,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `owner id_idx` (`name`),
   KEY `owner id (images)` (`owner_id`),
   CONSTRAINT `owner id (images)` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +97,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
+INSERT INTO `images` VALUES (12,5,'36910f25-c29b-48df-8e44-429405b23258','2022-05-30 13:43:54'),(13,5,'266e47c4-26f6-4c2b-9efd-287c9743ea77','2022-05-30 13:45:37'),(14,8,'b4094f10-9cb1-4955-a851-b1e6a069e556','2022-05-30 13:45:48');
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,9 +114,9 @@ CREATE TABLE `users` (
   `email` varchar(127) DEFAULT NULL,
   `phone` varchar(127) DEFAULT NULL,
   `password` varchar(127) DEFAULT NULL,
-  `created` timestamp(3) NULL DEFAULT NULL,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,6 +125,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (5,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 19:06:07'),(6,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:35'),(7,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:37'),(8,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:38'),(9,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:38'),(10,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:39'),(11,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:39'),(12,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:40'),(13,'VasyaPupkin','info@info.ru','8800553535','dengi_gde','2022-05-29 23:14:40');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -136,4 +138,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-29 18:02:32
+-- Dump completed on 2022-05-30 13:53:30
