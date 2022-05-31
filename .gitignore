@@ -135,8 +135,11 @@ dmypy.json
 .DS_Store
 
 # Settings file
-settings.yml
-settings.py
+app/settings.yml
+app/settings.py
 
 # Project files
-images/
+app/images/
+
+# Docker configuration
+docker-compose.yml
