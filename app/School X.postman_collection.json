@@ -1,0 +1,428 @@
+{
+	"info": {
+		"_postman_id": "addabad6-7ecd-43f0-8ebf-e5de778e15ac",
+		"name": "School X",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16965604"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/login?user=root&password=root",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "root"
+						},
+						{
+							"key": "password",
+							"value": "root"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:1337/users?name=MariaPupkina&email=asdabasdadfgd&phone=8800553535&password=dengi_gde&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1MzkyMTIyN30.WMDptswblJj6gbCmn8oQR2OzOGnjll6-teWjUFtxf_k",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "MariaPupkina"
+						},
+						{
+							"key": "email",
+							"value": "asdabasdadfgd"
+						},
+						{
+							"key": "phone",
+							"value": "8800553535"
+						},
+						{
+							"key": "password",
+							"value": "dengi_gde"
+						},
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1MzkyMTIyN30.WMDptswblJj6gbCmn8oQR2OzOGnjll6-teWjUFtxf_k"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "rename_user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:1337/users?id=15&name=NadyaPupkina&phone=88888888888&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDAzMDI2OX0.iaa4BAdYTkpa9bGYUVItPjZIDE21hbFsLsz44r4CidI",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1337",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "15"
+						},
+						{
+							"key": "name",
+							"value": "NadyaPupkina"
+						},
+						{
+							"key": "phone",
+							"value": "88888888888"
+						},
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDAzMDI2OX0.iaa4BAdYTkpa9bGYUVItPjZIDE21hbFsLsz44r4CidI"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:1337/users?id=15&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDAzMDI2OX0.iaa4BAdYTkpa9bGYUVItPjZIDE21hbFsLsz44r4CidI",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1337",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "15"
+						},
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDAzMDI2OX0.iaa4BAdYTkpa9bGYUVItPjZIDE21hbFsLsz44r4CidI"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_image",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/images?owner_id=8&ratio=80",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"images"
+					],
+					"query": [
+						{
+							"key": "image_id",
+							"value": "13",
+							"disabled": true
+						},
+						{
+							"key": "owner_id",
+							"value": "8"
+						},
+						{
+							"key": "ratio",
+							"value": "80"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/images?owner_id=16&image_url=https://blog.appseed.us/content/images/2021/04/image-7.png",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"images"
+					],
+					"query": [
+						{
+							"key": "owner_id",
+							"value": "16"
+						},
+						{
+							"key": "image_url",
+							"value": "https://blog.appseed.us/content/images/2021/04/image-7.png"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change_image",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/images?image_url=https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F3.bp.blogspot.com%2F-bQX_E_G4pc8%2FTbaKliW6MRI%2FAAAAAAAAA08%2F7J0flLWQoxg%2Fs1600%2FWaterfalls%2BWallpaper%2B0107%25255B1%25255D.jpg&old_image_name=65833cf6-7dcc-4277-a41a-85f11c202d81",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"images"
+					],
+					"query": [
+						{
+							"key": "image_url",
+							"value": "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F3.bp.blogspot.com%2F-bQX_E_G4pc8%2FTbaKliW6MRI%2FAAAAAAAAA08%2F7J0flLWQoxg%2Fs1600%2FWaterfalls%2BWallpaper%2B0107%25255B1%25255D.jpg"
+						},
+						{
+							"key": "old_image_name",
+							"value": "65833cf6-7dcc-4277-a41a-85f11c202d81"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_image",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/images?image_name=b109a8d4-c9a4-4b89-830b-cdea8a07a837",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"images"
+					],
+					"query": [
+						{
+							"key": "image_name",
+							"value": "b109a8d4-c9a4-4b89-830b-cdea8a07a837"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_favorites",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/favorites?image_id=18&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"favorites"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "13",
+							"disabled": true
+						},
+						{
+							"key": "image_id",
+							"value": "18"
+						},
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_favorites",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/favorites?user_id=13&image_id=18&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"favorites"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "13"
+						},
+						{
+							"key": "image_id",
+							"value": "18"
+						},
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_favorites",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/favorites?user_id=13&image_id=15&old_image_id=18&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"favorites"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "13"
+						},
+						{
+							"key": "image_id",
+							"value": "15"
+						},
+						{
+							"key": "old_image_id",
+							"value": "18"
+						},
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_favorites",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:1337/favorites?user_id=13&image_id=15&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"favorites"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "13"
+						},
+						{
+							"key": "image_id",
+							"value": "15"
+						},
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicm9vdCIsImV4cCI6MTY1NDA3MTk3NH0.iiCSiQMMVDUgda9o_dpRoN_jqnlSYbNls7V7_nnO-wg"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "addTokenTo",
+				"value": "queryParams",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

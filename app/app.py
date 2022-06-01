@@ -10,11 +10,11 @@ import jwt
 from functools import wraps
 import requests
 import uuid
+import yaml
 
 app = Flask(__name__)
-swaggerui_blueprint = get_swaggerui_blueprint('/api/docs',
-                                              '/api/docs/raw',
-                                              config={'app_name': 'swaggerui test'})
+swaggerui_blueprint = get_swaggerui_blueprint('/api',
+                                              yaml.safe_load(open(f'{os.path.dirname(__file__)}/swagger.yaml', 'r')))
 app.register_blueprint(swaggerui_blueprint)
 
 app.config['MYSQL_DATABASE_HOST'] = settings.MYSQL_HOST
@@ -116,7 +116,7 @@ def users():
                 f'''INSERT INTO `school_x`.`users` (`name`, `email`, `phone`, `password`) VALUES("{name}","{email}","{phone}","{password}");''')
             cursor.connection.commit()
             cursor.close()
-            return 'all good, user created', 200
+            return jsonify({'message': 'Successfully created a new user'}), 200
         except Exception as e:
             return jsonify({'message': 'Error creating user',
                             'error': str(e)}), 500
@@ -132,17 +132,28 @@ def users():
             cursor.execute(f'''UPDATE `school_x`.`users` SET {set_part.rstrip(',')}  WHERE id = "{id}";''')
             cursor.connection.commit()
             cursor.close()
-            return "user updated", 200
+            return jsonify({'message': 'Successfully updated user'}), 200
         except Exception as e:
             return str(e), 500
     if request.method == 'DELETE':
         try:
             id = data['id']
             cursor = mysql.get_db().cursor()
+            cursor.execute(f'''SET FOREIGN_KEY_CHECKS = 0;''')
+            cursor.connection.commit()
+            cursor.execute(f'''DELETE FROM `school_x`.`favorites` WHERE `user_id` = "{id}";''')
+            cursor.connection.commit()
+            cursor.execute(f'''SELECT `id` FROM `school_x`.`images` WHERE `owner_id` = "{id}";''')
+            image_id = cursor.fetchone()
+            cursor.execute(f'''DELETE FROM `school_x`.`images` WHERE `owner_id` = "{id}";''')
+            cursor.connection.commit()
+            cursor.execute(f'''DELETE FROM `school_x`.`files` WHERE `image_id` = "{image_id[0]}";''')
+            cursor.connection.commit() # TODO: delete many lines in one time - otherwise it throws error about foreign key
             cursor.execute(f'''DELETE FROM `school_x`.`users` WHERE `id` = "{id}";''')
             cursor.connection.commit()
+            cursor.execute(f'''SET FOREIGN_KEY_CHECKS = 1;''')
             cursor.close()
-            return "user deleted", 200
+            return jsonify({'message': 'Successfully deleted user, his images and favorites'}), 200
         except Exception as e:
             return str(e), 500
 
@@ -236,6 +247,7 @@ def images():
                 cursor.execute(
                     f'''INSERT INTO `school_x`.`images` (`owner_id`, `name`) VALUES("{owner_id}","{image_name}");''')
                 cursor.connection.commit()
+
                 cursor.execute(
                     f'''SELECT `id` FROM `school_x`.`images` WHERE `name` = "{image_name}";'''
                 )
@@ -265,6 +277,10 @@ def images():
                                                                    image_path=image_path)
             if image_created:
                 cursor = mysql.get_db().cursor()
+                cursor.execute(f'''SELECT `id` FROM `school_x`.`images` WHERE `name` = "{old_image_name}";''')
+                is_image_exist = cursor.fetchone()
+                if not is_image_exist:
+                    return jsonify({'message': 'Image not found'}), 404
                 cursor.execute(
                     f'''UPDATE `school_x`.`images` SET `name` = "{image_name}" WHERE `name` = "{old_image_name}";'''
                 )
@@ -284,6 +300,7 @@ def images():
             return jsonify({'message': 'Error while updating image',
                             'error': str(e)}), 500
     if request.method == 'DELETE':
+        # TODO: delete from favorites
         image_name = data['image_name']
         try:
             cursor = mysql.get_db().cursor()
@@ -311,8 +328,8 @@ def favorites():
     data = data_processing()
     user_id = data.get('user_id')
     image_id = data.get('image_id')
-    cursor = mysql.get_db().cursor()
     if request.method == 'GET':
+        cursor = mysql.get_db().cursor()
         try:
             if user_id is None and image_id:
                 cursor.execute(
@@ -329,7 +346,7 @@ def favorites():
                 cursor.close()
                 if not image_name:
                     return jsonify({'message': 'Image not found while getting favorites'}), 403
-                return jsonify({'user_id': fetcher[0],
+                return jsonify({'user_id': str(fetcher[0]),
                                 'image_id': image_id,
                                 'image_name': image_name})
             if user_id:
@@ -348,7 +365,7 @@ def favorites():
                 if not image_name:
                     return jsonify({'message': 'Image not found while getting favorites'}), 403
                 return jsonify({'user_id': user_id,
-                                'image_id': fetcher[1],
+                                'image_id': str(fetcher[1]),
                                 'image_name': image_name})
             if not user_id and not image_id:
                 cursor.close()
@@ -358,6 +375,7 @@ def favorites():
             return jsonify({'message': 'Error getting favorites',
                             'error': str(e)}), 500
     if request.method == 'POST':
+        cursor = mysql.get_db().cursor()
         try:
             cursor.execute(
                 f'''INSERT INTO `school_x`.`favorites` (`user_id`, `image_id`) VALUES ("{user_id}","{image_id}");'''
@@ -369,25 +387,38 @@ def favorites():
             return jsonify({'message': 'Error creating favorites',
                             'error': str(e)}), 500
     if request.method == 'PUT':
+        cursor = mysql.get_db().cursor()
         try:
-            if user_id and image_id:
+            old_image_id = data.get('old_image_id')
+            cursor.execute(f'''SELECT `user_id`, `image_id` FROM `school_x`.`favorites` WHERE `user_id` = "{user_id}" AND `image_id` = "{old_image_id}";''')
+            is_favorite_exists = cursor.fetchone()
+            if not is_favorite_exists:
+                return jsonify({'message': 'Favorites not found'}), 404
+            if user_id and image_id and old_image_id:
                 cursor.execute(
-                    f'''UPDATE `school_x`.`favorites` SET `user_id` = "{user_id}", `image_id` = "{image_id}" WHERE `image_id` = "{image_id} AND `user_id` = "{user_id};")'''
+                    f'''UPDATE `school_x`.`favorites` SET `user_id` = "{user_id}", `image_id` = "{image_id}" WHERE `image_id` = "{old_image_id}" AND `user_id` = "{user_id}";'''
                 )
                 cursor.connection.commit()
                 cursor.close()
+                return jsonify({'message': 'Favorites successfully updated'}), 200
             else:
                 cursor.close()
-                return jsonify({'message': 'user_id and image_id are required'}), 403
+                return jsonify({'message': 'user_id, old_image_id and image_id are required'}), 403
         except Exception as e:
             cursor.close()
             return jsonify({'message': 'Error while updating favorites',
                             'error': str(e)}), 500
     if request.method == 'DELETE':
+        cursor = mysql.get_db().cursor()
         try:
             if user_id and image_id:
                 cursor.execute(
-                    f'''DELETE FROM `school_x`.`favorites` WHERE `user_id` = "{user_id} AND `image_id` = "{image_id}";'''
+                    f'''SELECT `user_id`, `image_id` FROM `school_x`.`favorites` WHERE `user_id` = "{user_id}" AND `image_id` = "{image_id}";''')
+                is_favorite_exists = cursor.fetchone()
+                if not is_favorite_exists:
+                    return jsonify({'message': 'Favorites not found'}), 404
+                cursor.execute(
+                    f'''DELETE FROM `school_x`.`favorites` WHERE `user_id` = "{user_id}" AND `image_id` = "{image_id}";'''
                 )
                 cursor.connection.commit()
                 cursor.close()
@@ -418,13 +449,6 @@ def login():
                            app.config['SECRET_KEY'],
                            algorithm='HS256')
         return jsonify({'token': token})
-
-@app.route("/api/docs/raw")
-def spec():
-    swag = swagger(app)
-    swag['info']['version'] = "1.3.3.7"
-    swag['info']['title'] = "My API for School X backed module"
-    return jsonify(swag)
 
 
 # TODO: function that will clear not used photos each week
